@@ -5,16 +5,17 @@ import { useContext } from "react"
 import styles from "./entry.module.scss"
 
 // UI components
-import { LogoutOutlined, PieChartOutlined } from "@ant-design/icons"
+import { LogoutOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons"
 import Logo from "./assets/images/kingsman_logo.webp"
 import { Layout, Menu } from "antd"
 
 // Routes
 import Login from "./routes/login/login"
+import Dashboard from "./routes/dashboard/dashboard"
+import Partners from "./routes/partners/partners"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
-import Dashboard from "./routes/dashboard/dashboard"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -34,6 +35,7 @@ const { Header, Content, Sider } = Layout
 
 const items: any[] = [
 	{ key: "dashboard", label: "Dashboard", icon: <PieChartOutlined /> },
+	{ key: "partners", label: "Partners", icon: <UserOutlined /> },
 	{ key: "sign_out", label: "Sign out", icon: <LogoutOutlined /> },
 ]
 
@@ -51,6 +53,8 @@ function Router() {
 			} catch (error) {
 				console.error("Sign-out Error: ", error)
 			}
+		} else {
+			window.location.href = `/${item.key}`
 		}
 	}
 
@@ -80,6 +84,10 @@ function Router() {
 								<Route
 									path="/dashboard"
 									element={<Dashboard />}
+								/>
+								<Route
+									path="/partners"
+									element={<Partners />}
 								/>
 							</Routes>
 						</BrowserRouter>
