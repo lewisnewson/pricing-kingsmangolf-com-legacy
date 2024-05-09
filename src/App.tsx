@@ -1,14 +1,9 @@
-import './App.scss';
-import { Button } from 'antd';
+import "./app.scss"
+
+import Users from "./routes/users"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Button type="primary">Button</Button>
-      </header>
-    </div>
-  );
+    return <Users />
 }
 
-export default App;
+export default App
