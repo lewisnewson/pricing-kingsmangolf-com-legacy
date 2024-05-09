@@ -18,7 +18,7 @@ export default function Users() {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <img src={Logo} />
+                <img src={Logo} alt="Kingsman Golf" />
 
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} />
             </Sider>
