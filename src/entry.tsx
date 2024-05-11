@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { AuthProvider, AuthContext } from "./utils/contexts/auth"
 import { getAuth, signOut } from "firebase/auth"
+import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import styles from "./entry.module.scss"
 
@@ -39,9 +40,11 @@ const items: any[] = [
 	{ key: "sign_out", label: "Sign out", icon: <LogoutOutlined /> },
 ]
 
-function Router() {
+function AppRoutes() {
 	// Get the isLoggedIn state from the AuthContext
 	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+
+	const navigate = useNavigate()
 
 	const onMenuClick = async (item: any) => {
 		if (item.key === "sign_out") {
@@ -54,7 +57,7 @@ function Router() {
 				console.error("Sign-out Error: ", error)
 			}
 		} else {
-			window.location.href = `/${item.key}`
+			navigate(`/${item.key}`)
 		}
 	}
 
@@ -79,41 +82,45 @@ function Router() {
 				<Layout>
 					<Header style={{ padding: 0, background: "#ffffff" }} />
 					<Content style={{ padding: "12px 16px" }}>
-						<BrowserRouter>
-							<Routes>
-								<Route
-									path="/dashboard"
-									element={<Dashboard />}
-								/>
-								<Route
-									path="/partners"
-									element={<Partners />}
-								/>
-							</Routes>
-						</BrowserRouter>
+						<Routes>
+							<Route
+								path="/dashboard"
+								element={<Dashboard />}
+							/>
+							<Route
+								path="/partners"
+								element={<Partners />}
+							/>
+						</Routes>
 					</Content>
 				</Layout>
 			</Layout>
 		)
 	} else {
 		return (
-			<BrowserRouter>
-				<Routes>
-					<Route
-						path="/login"
-						element={<Login />}
-					/>
-				</Routes>
-			</BrowserRouter>
+			<Routes>
+				<Route
+					path="/login"
+					element={<Login />}
+				/>
+			</Routes>
 		)
 	}
+}
+
+function RouterWrapper() {
+	return (
+		<BrowserRouter>
+			<AppRoutes />
+		</BrowserRouter>
+	)
 }
 
 // Default app entry
 export default function App() {
 	return (
 		<AuthProvider>
-			<Router />
+			<RouterWrapper />
 		</AuthProvider>
 	)
 }
