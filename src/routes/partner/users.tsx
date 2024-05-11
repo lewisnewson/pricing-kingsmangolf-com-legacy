@@ -1,15 +1,13 @@
 import { query, collection, where, getDocs, doc, getDoc } from "firebase/firestore"
 import { db } from "src/firebase.config"
 import { useParams, useNavigate } from "react-router-dom"
-import { Breadcrumb, Spin, Table, notification } from "antd"
+import { Breadcrumb, Spin, Table } from "antd"
 import { useEffect, useState } from "react"
 
 export default function PartnerUsers() {
 	const [users, setUsers] = useState<any[]>([])
 	const [loading, setLoading] = useState(true)
 	const [partnerName, setPartnerName] = useState<string | null>(null)
-
-	const [api, contextHolder] = notification.useNotification()
 
 	const { partnerID } = useParams()
 
@@ -46,7 +44,7 @@ export default function PartnerUsers() {
 		if (partnerID) {
 			fetchUsers()
 		}
-	}, [partnerID])
+	}, [partnerID, navigate])
 
 	if (loading) {
 		return (
@@ -58,8 +56,6 @@ export default function PartnerUsers() {
 
 	return (
 		<>
-			{contextHolder}
-
 			<Breadcrumb>
 				<Breadcrumb.Item onClick={() => navigate("/partners")}>Partners</Breadcrumb.Item>
 				<Breadcrumb.Item>{partnerName}</Breadcrumb.Item>
