@@ -1,5 +1,6 @@
 import { getFirestore, collection, getDocs } from "firebase/firestore"
 import { getFunctions, httpsCallable } from "firebase/functions"
+import { useNavigate } from "react-router-dom"
 import { Button, Space, Table, Modal, Input, notification } from "antd"
 import { useEffect, useState } from "react"
 
@@ -15,6 +16,8 @@ export default function Partners() {
 	const [api, contextHolder] = notification.useNotification()
 
 	const functions = getFunctions()
+
+	const navigate = useNavigate()
 
 	const showModal = (record: any) => {
 		setAddTo(record)
@@ -99,6 +102,11 @@ export default function Partners() {
 						key: "actions",
 						render: (_: any, record: any) => (
 							<Space size="middle">
+								<Button
+									type="primary"
+									onClick={() => navigate(`/partner/${record.key}/users`)}>
+									View Users
+								</Button>
 								<Button onClick={() => showModal(record)}>Add User</Button>
 							</Space>
 						),

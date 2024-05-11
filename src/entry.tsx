@@ -14,6 +14,7 @@ import { Layout, Menu } from "antd"
 import Login from "./routes/login/login"
 import Dashboard from "./routes/dashboard/dashboard"
 import Partners from "./routes/partners/partners"
+import PartnerUsers from "./routes/partner/users"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
@@ -90,6 +91,10 @@ function AppRoutes() {
 							<Route
 								path="/partners"
 								element={<Partners />}
+							/>
+							<Route
+								path="/partner/:partnerID/users"
+								element={<PartnerUsers />}
 							/>
 						</Routes>
 					</Content>
