@@ -1,5 +1,6 @@
 import { getFirestore, collection, getDocs } from "firebase/firestore"
-import { Button, Space, Table, Modal, Input } from "antd"
+import { getFunctions, httpsCallable } from "firebase/functions"
+import { Button, Space, Table, Modal, Input, notification } from "antd"
 import { useEffect, useState } from "react"
 
 export default function Partners() {
@@ -11,6 +12,10 @@ export default function Partners() {
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
 
+	const [api, contextHolder] = notification.useNotification()
+
+	const functions = getFunctions()
+
 	const showModal = (record: any) => {
 		setAddTo(record)
 		setIsModalOpen(true)
@@ -19,15 +24,34 @@ export default function Partners() {
 	const handleOk = async () => {
 		setAdding(true)
 
-		await new Promise((resolve) => setTimeout(resolve, 1000))
+		const partnerID = addTo.key
 
-		setIsModalOpen(false)
+		try {
+			const createUserFn = httpsCallable(functions, "createNewAuthAccount")
+			const result: any = await createUserFn({ email, displayName: name, partnerID })
+
+			if (result?.data?.userID) {
+				api["success"]({
+					message: "User Created",
+					description: "The new user account has been setup and an email has been sent to them.",
+				})
+			}
+		} catch (error) {
+			api["error"]({
+				message: "New User Error",
+				description: "There was an error creating the new user account.",
+			})
+			console.log(error)
+		}
+
+		resetAndCloseModal()
 	}
 
-	const handleCancel = () => {
+	const resetAndCloseModal = () => {
 		setName("")
 		setEmail("")
 		setAddTo({})
+		setAdding(false)
 		setIsModalOpen(false)
 	}
 
@@ -55,6 +79,8 @@ export default function Partners() {
 
 	return (
 		<>
+			{contextHolder}
+
 			<Table
 				dataSource={allPartners}
 				columns={[
@@ -84,11 +110,11 @@ export default function Partners() {
 				title={`Adding user to: ${addTo.name}`}
 				open={isModalOpen}
 				onOk={handleOk}
-				onCancel={handleCancel}
+				onCancel={resetAndCloseModal}
 				footer={[
 					<Button
 						key="back"
-						onClick={handleCancel}>
+						onClick={resetAndCloseModal}>
 						Cancel
 					</Button>,
 					<Button
