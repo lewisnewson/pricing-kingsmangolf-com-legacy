@@ -1,6 +1,6 @@
 import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore"
 import { useNavigate } from "react-router-dom"
-import { Button, Space, Table, Modal, Input, notification, Form } from "antd"
+import { Button, Space, Table, Modal, Input, notification, Form, Badge } from "antd"
 import { useEffect, useState } from "react"
 
 export default function Suppliers() {
@@ -29,8 +29,13 @@ export default function Suppliers() {
 				const suppliers = querySnapshot.docs.map((doc) => ({
 					key: doc.id,
 					...doc.data(),
-					hotels: 0,
-					courses: 0,
+					requests: (
+						<Badge
+							status="processing"
+							text="13"
+						/>
+					),
+					bookings: 0,
 				}))
 
 				setAllSuppliers(suppliers)
@@ -107,14 +112,14 @@ export default function Suppliers() {
 						key: "name",
 					},
 					{
-						title: "Hotels",
-						dataIndex: "hotels",
-						key: "hotels",
+						title: "Requests",
+						dataIndex: "requests",
+						key: "requests",
 					},
 					{
-						title: "Courses",
-						dataIndex: "courses",
-						key: "courses",
+						title: "Bookings",
+						dataIndex: "bookings",
+						key: "bookings",
 					},
 					{
 						title: "Actions",

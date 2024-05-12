@@ -31,12 +31,12 @@ export default function SupplierDetails() {
 			}
 		}
 		fetchSupplierData()
-	}, [])
+	}, [supplierID, navigate])
 
 	return (
 		<Card>
 			<Descriptions
-				title="Sueno Deluxe"
+				title={supplier?.name}
 				items={[
 					{
 						key: "1",
@@ -72,6 +72,28 @@ export default function SupplierDetails() {
 								text="16"
 							/>
 						),
+					},
+				]}
+			/>
+
+			<Divider />
+
+			<Table
+				columns={[
+					{
+						title: "Booking ID",
+						dataIndex: "name",
+						key: "name",
+					},
+				]}
+			/>
+
+			<Table
+				columns={[
+					{
+						title: "Request ID",
+						dataIndex: "name",
+						key: "name",
 					},
 				]}
 			/>
