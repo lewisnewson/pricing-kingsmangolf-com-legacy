@@ -19,6 +19,7 @@ import Suppliers from "./routes/suppliers/suppliers"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
+import SupplierDetails from "./routes/supplier/supplier"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -83,6 +84,9 @@ function AppRoutes() {
 				if (pathname.startsWith("/partner/") && pathname.endsWith("/users")) {
 					return "Partner Users"
 				}
+				if (pathname.startsWith("/supplier/")) {
+					return "Supplier Details"
+				}
 				return "Unknown" // or a default route name
 		}
 	}
@@ -130,6 +134,10 @@ function AppRoutes() {
 							<Route
 								path="/suppliers"
 								element={<Suppliers />}
+							/>
+							<Route
+								path="supplier/:supplierID"
+								element={<SupplierDetails />}
 							/>
 						</Routes>
 					</Content>
