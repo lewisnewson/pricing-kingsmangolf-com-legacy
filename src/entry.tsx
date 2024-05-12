@@ -6,13 +6,12 @@ import { useContext } from "react"
 import styles from "./entry.module.scss"
 
 // UI components
-import { BookOutlined, LogoutOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons"
+import { BookOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons"
 import Logo from "./assets/images/kingsman_logo.webp"
 import { Layout, Menu, Typography } from "antd"
 
 // Routes
 import Login from "./routes/login/login"
-import Dashboard from "./routes/dashboard/dashboard"
 import Partners from "./routes/partners/partners"
 import PartnerUsers from "./routes/partner/users"
 import Suppliers from "./routes/suppliers/suppliers"
@@ -38,7 +37,6 @@ initializeApp(firebaseConfig)
 const { Header, Content, Sider } = Layout
 
 const items: any[] = [
-	{ key: "dashboard", label: "Dashboard", icon: <PieChartOutlined /> },
 	{ key: "suppliers", label: "Suppliers", icon: <BookOutlined /> },
 	{ key: "partners", label: "Partners", icon: <UserOutlined /> },
 	{ key: "sign_out", label: "Sign out", icon: <LogoutOutlined /> },
@@ -72,10 +70,6 @@ function AppRoutes() {
 		switch (pathname) {
 			case "/":
 				return "Home"
-			case "/login":
-				return "Login"
-			case "/dashboard":
-				return "Dashboard"
 			case "/partners":
 				return "Partners"
 			case "/suppliers":
@@ -119,10 +113,6 @@ function AppRoutes() {
 					</Header>
 					<Content style={{ padding: "12px 16px" }}>
 						<Routes>
-							<Route
-								path="/dashboard"
-								element={<Dashboard />}
-							/>
 							<Route
 								path="/partners"
 								element={<Partners />}

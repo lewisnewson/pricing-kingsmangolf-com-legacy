@@ -19,8 +19,8 @@ const Login = () => {
 			const auth = getAuth()
 			await signInWithEmailAndPassword(auth, email, password)
 
-			// Redirect to dashboard on success
-			navigate("/dashboard")
+			// Redirect to requests on success
+			navigate("/requests")
 		} catch (err: any) {
 			setError(err.message)
 		}
