@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { AuthProvider, AuthContext } from "./utils/contexts/auth"
 import { getAuth, signOut } from "firebase/auth"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useContext } from "react"
 import styles from "./entry.module.scss"
 
 // UI components
 import { LogoutOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons"
 import Logo from "./assets/images/kingsman_logo.webp"
-import { Layout, Menu } from "antd"
+import { Layout, Menu, Typography } from "antd"
 
 // Routes
 import Login from "./routes/login/login"
@@ -46,6 +46,9 @@ function AppRoutes() {
 	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+
+	const { Title } = Typography
 
 	const onMenuClick = async (item: any) => {
 		if (item.key === "sign_out") {
@@ -59,6 +62,25 @@ function AppRoutes() {
 			}
 		} else {
 			navigate(`/${item.key}`)
+		}
+	}
+
+	const getRouteName = (pathname: string) => {
+		console.log("Pathname: ", pathname)
+		switch (pathname) {
+			case "/":
+				return "Home"
+			case "/login":
+				return "Login"
+			case "/dashboard":
+				return "Dashboard"
+			case "/partners":
+				return "Partners"
+			default:
+				if (pathname.startsWith("/partner/") && pathname.endsWith("/users")) {
+					return "Partner Users"
+				}
+				return "Unknown" // or a default route name
 		}
 	}
 
@@ -81,7 +103,13 @@ function AppRoutes() {
 					/>
 				</Sider>
 				<Layout>
-					<Header style={{ padding: 0, background: "#ffffff" }} />
+					<Header style={{ padding: 0, background: "#ffffff", display: "flex", alignItems: "center" }}>
+						<Title
+							level={5}
+							style={{ margin: 0, paddingLeft: "16px" }}>
+							{getRouteName(location.pathname)}
+						</Title>
+					</Header>
 					<Content style={{ padding: "12px 16px" }}>
 						<Routes>
 							<Route
