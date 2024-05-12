@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs } from "firebase/firestore"
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore"
 import { getFunctions, httpsCallable } from "firebase/functions"
 import { useNavigate } from "react-router-dom"
 import { Button, Space, Table, Modal, Input, notification } from "antd"
@@ -7,11 +7,15 @@ import { useEffect, useState } from "react"
 export default function Partners() {
 	const [allPartners, setAllPartners] = useState<any>([])
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false)
 
 	const [addTo, setAddTo] = useState<any>({})
 	const [adding, setAdding] = useState(false)
+	const [addingPartner, setAddingPartner] = useState(false)
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
+
+	const [partnerName, setPartnerName] = useState<string>("")
 
 	const [api, contextHolder] = notification.useNotification()
 
@@ -80,9 +84,52 @@ export default function Partners() {
 		fetchPartners()
 	}, [])
 
+	const createNewPartnerAccount = async () => {
+		setAddingPartner(true)
+
+		try {
+			const db = getFirestore()
+			const partnersRef = collection(db, "partners")
+
+			await addDoc(partnersRef, { name: partnerName })
+
+			const querySnapshot = await getDocs(partnersRef)
+			const partners = querySnapshot.docs.map((doc) => ({
+				key: doc.id,
+				...doc.data(),
+			}))
+
+			setAllPartners(partners)
+
+			api["success"]({
+				message: "Partner Created",
+				description: "The new partner has been added.",
+			})
+		} catch (error) {
+			api["error"]({
+				message: "New Partner Error",
+				description: "There was an error creating the new partner.",
+			})
+			console.error("Error creating partner: ", error)
+		}
+
+		resetAndClosePartnerModal()
+	}
+
+	const resetAndClosePartnerModal = () => {
+		setPartnerName("")
+		setAddingPartner(false)
+		setIsPartnerModalOpen(false)
+	}
+
 	return (
 		<>
 			{contextHolder}
+
+			<Button onClick={() => setIsPartnerModalOpen(true)}>Add New Partner</Button>
+
+			<br />
+			<br />
 
 			<Table
 				dataSource={allPartners}
@@ -146,6 +193,34 @@ export default function Partners() {
 					value={email}
 					required
 					onChange={(e) => setEmail(e.target.value)}
+				/>
+			</Modal>
+
+			<Modal
+				title="Create New Partner"
+				open={isPartnerModalOpen}
+				onOk={createNewPartnerAccount}
+				onCancel={resetAndClosePartnerModal}
+				footer={[
+					<Button
+						key="back"
+						onClick={resetAndClosePartnerModal}>
+						Cancel
+					</Button>,
+					<Button
+						key="submit"
+						type="primary"
+						loading={addingPartner}
+						onClick={createNewPartnerAccount}>
+						Create Partner
+					</Button>,
+				]}>
+				<Input
+					type="text"
+					placeholder="Name"
+					value={partnerName}
+					required
+					onChange={(e) => setPartnerName(e.target.value)}
 				/>
 			</Modal>
 		</>
