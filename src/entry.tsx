@@ -6,7 +6,7 @@ import { useContext } from "react"
 import styles from "./entry.module.scss"
 
 // UI components
-import { LogoutOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons"
+import { BookOutlined, LogoutOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons"
 import Logo from "./assets/images/kingsman_logo.webp"
 import { Layout, Menu, Typography } from "antd"
 
@@ -15,6 +15,7 @@ import Login from "./routes/login/login"
 import Dashboard from "./routes/dashboard/dashboard"
 import Partners from "./routes/partners/partners"
 import PartnerUsers from "./routes/partner/users"
+import Suppliers from "./routes/suppliers/suppliers"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
@@ -37,6 +38,7 @@ const { Header, Content, Sider } = Layout
 
 const items: any[] = [
 	{ key: "dashboard", label: "Dashboard", icon: <PieChartOutlined /> },
+	{ key: "suppliers", label: "Suppliers", icon: <BookOutlined /> },
 	{ key: "partners", label: "Partners", icon: <UserOutlined /> },
 	{ key: "sign_out", label: "Sign out", icon: <LogoutOutlined /> },
 ]
@@ -66,7 +68,6 @@ function AppRoutes() {
 	}
 
 	const getRouteName = (pathname: string) => {
-		console.log("Pathname: ", pathname)
 		switch (pathname) {
 			case "/":
 				return "Home"
@@ -76,6 +77,8 @@ function AppRoutes() {
 				return "Dashboard"
 			case "/partners":
 				return "Partners"
+			case "/suppliers":
+				return "Suppliers"
 			default:
 				if (pathname.startsWith("/partner/") && pathname.endsWith("/users")) {
 					return "Partner Users"
@@ -123,6 +126,10 @@ function AppRoutes() {
 							<Route
 								path="/partner/:partnerID/users"
 								element={<PartnerUsers />}
+							/>
+							<Route
+								path="/suppliers"
+								element={<Suppliers />}
 							/>
 						</Routes>
 					</Content>
