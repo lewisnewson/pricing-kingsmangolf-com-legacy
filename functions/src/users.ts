@@ -41,6 +41,7 @@ export const createNewAuthAccount = functions.runWith({ minInstances: 1 }).https
 			full_name: displayName,
 			email,
 			partnerID,
+			created: admin.firestore.FieldValue.serverTimestamp(),
 		})
 
 		// Send password reset email

@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore"
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore"
 import { getFunctions, httpsCallable } from "firebase/functions"
 import { useNavigate } from "react-router-dom"
 import { Button, Space, Table, Modal, Input, notification } from "antd"
@@ -91,7 +91,7 @@ export default function Partners() {
 			const db = getFirestore()
 			const partnersRef = collection(db, "partners")
 
-			await addDoc(partnersRef, { name: partnerName })
+			await addDoc(partnersRef, { name: partnerName, created: serverTimestamp() })
 
 			const querySnapshot = await getDocs(partnersRef)
 			const partners = querySnapshot.docs.map((doc) => ({
